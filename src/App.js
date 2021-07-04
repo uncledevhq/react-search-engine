@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './App.css';
 
 import ReturnedResult from './components/ReturnedResult';
 import axios from 'axios';
@@ -9,8 +9,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: "google",
+      searchTerm: "",
+      returnedResult: "",
       returnedSearch: [],
+      returnedAnswers: [],
       loading: false
 
     }
@@ -21,24 +23,6 @@ class App extends React.Component {
   }
 
  
-
-  // componentDidMount() {
-
-  //   // const searchTerm = this.state.searchTerm;
-  //   const options = {
-  //     method: 'GET',
-  //     url: 'https://google-search3.p.rapidapi.com/api/v1/search/q='+this.state.searchTerm+'a&num=100',
-  //     headers: {
-  //       'x-rapidapi-key': 'ba4d786292mshc149894312d7ed2p1ca8d3jsna1d970fd15b2',
-  //       'x-rapidapi-host': 'google-search3.p.rapidapi.com'
-  //     }
-  //   };
-
-
-    
-  // }
-
-
   handleSearchInput(e) {
     this.setState({
       searchTerm: e.target.value
@@ -65,8 +49,11 @@ class App extends React.Component {
       console.log(response.data);
       this.setState({
         loading: false,
-        returnedSearch: response.data.results
+        returnedSearch: response.data.results,
+        returnedAnswers: response.data.answers,
+        returnedResult:  response.data.total
       })
+      
     }).catch(function (error) {
       console.error(error);
     });
@@ -79,7 +66,7 @@ class App extends React.Component {
     const searchResultsObj = this.state.returnedSearch;
     console.log(typeof searchResults);
     return (
-      <div className="app-container">
+      <div className="app">
         <form onSubmit={this.handleSearch}>
           <input value={this.state.searchTerm} onChange={this.handleSearchInput} type="search" name="search" placeholder="Search  the web with Ease" />
           <button>Search</button>
@@ -87,17 +74,9 @@ class App extends React.Component {
 
 
         <section>
-          {this.state.loading && <p>searching for {this.state.searchTerm}...</p>}
-          show results: 
-          <pre>
-          
+          {this.state.loading &&<p>searching for {this.state.searchTerm}...</p>}
 
-            {
-              searchResultsObj.map((item,index) => <ReturnedResult key={index} result={item} />)
-            }
-          
-           
-          </pre>
+          {this.state.loading ? "" : <ReturnedResult totalResults={this.state.returnedResult} answers={this.state.returnedAnswers} typedQuery={this.state.searchTerm} results={searchResultsObj} />}
         </section>
       </div>
     )
