@@ -1,87 +1,39 @@
 import React from 'react';
-import './App.css';
-
-import ReturnedResult from './components/ReturnedResult';
-import axios from 'axios';
-// import { demand } from 'yargs';
-
+import "./App.scss";
+import qlogo from './qsearchLogo-01.svg';
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchTerm: "",
-      returnedResult: "",
-      returnedSearch: [],
-      returnedAnswers: [],
-      loading: false
-
-    }
-
-
-    this.handleSearchInput = this.handleSearchInput.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-  }
-
- 
-  handleSearchInput(e) {
-    this.setState({
-      searchTerm: e.target.value
-    })
-  }
-
-  handleSearch(e) {
-    e.preventDefault();
-    this.setState({
-      loading: true
-    })
-    console.log("submitting form now");
-
-
-    const options = {
-      method: 'GET',
-      url: 'https://google-search3.p.rapidapi.com/api/v1/search/q='+this.state.searchTerm+'a&num=100',
-      headers: {
-        'x-rapidapi-key': 'ba4d786292mshc149894312d7ed2p1ca8d3jsna1d970fd15b2',
-        'x-rapidapi-host': 'google-search3.p.rapidapi.com'
-      }
-    };
-    axios.request(options).then((response) => {
-      console.log(response.data);
-      this.setState({
-        loading: false,
-        returnedSearch: response.data.results,
-        returnedAnswers: response.data.answers,
-        returnedResult:  response.data.total
-      })
-      
-    }).catch(function (error) {
-      console.error(error);
-    });
-  }
-
-
-  
-
-  render() {
-    const searchResultsObj = this.state.returnedSearch;
-    console.log(typeof searchResults);
-    return (
-      <div className="app">
-        <form onSubmit={this.handleSearch}>
-          <input value={this.state.searchTerm} onChange={this.handleSearchInput} type="search" name="search" placeholder="Search  the web with Ease" />
-          <button>Search</button>
-        </form>
-
-
-        <section>
-          {this.state.loading &&<p>searching for {this.state.searchTerm}...</p>}
-
-          {this.state.loading ? "" : <ReturnedResult totalResults={this.state.returnedResult} answers={this.state.returnedAnswers} typedQuery={this.state.searchTerm} results={searchResultsObj} />}
-        </section>
-      </div>
-    )
-  }
+	constructor(props) {
+		super(props);
+		
+		const currentYear = (new Date()).getFullYear();
+		
+		this.state = {
+			currentYear
+		};
+	}
+	
+	render() {
+		return (
+			<div>				
+				<div className="flex-align-center-justify-center-direction-column view-height p-all">
+					<img className="foresight-logo m-bottom" alt="Qsearch" src={qlogo} />
+					<div className="foresight-search-bar fill-space m-bottom">
+						<input type="text" placeholder="Search the world now..." />
+						<i className="material-icons">search</i>
+					</div>
+					<div className="m-bottom">
+						<button className="btn primary m-right">Search</button>
+						<button className="btn dark-grey">Browse Zed News</button>
+					</div>
+					<div className="text-center text-grey font-lighter">
+						<div><small>&copy; Qsearch incopertated, {this.state.currentYear}</small></div>
+						<div><small>All rights reserved.</small></div>
+					</div>
+				</div>
+				
+			</div>
+		);
+	}
 }
-
 
 export default App;
