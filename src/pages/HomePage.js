@@ -58,7 +58,7 @@ function Home() {
             </small>
           </div>
           <div>
-            <small>Feel free to give feedback.</small>
+            <small>Pet project</small>
           </div>
         </div>
       </div>
